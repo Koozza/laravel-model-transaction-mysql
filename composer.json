@@ -1,0 +1,34 @@
+{
+    "name": "koozza/laravel-model-transaction-mysql",
+    "description": "Transaction support for laravel models",
+    "keywords": ["laravel", "model", "transaction"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thijs Dalmaijer",
+            "email": "info@thijsdalmaijer.nl"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "illuminate/support": "^5.5|^6",
+        "illuminate/contracts": "^5.5|^6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Koozza\\ModelTransaction\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Koozza\\ModelTransaction\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
