@@ -168,9 +168,9 @@ class ModelTransaction
 
                 array_push($insert, $model->getAttributes() + $keys + $touchTimestamps);
             }
-
+            $table = with(new $class)->getTable();
             foreach(array_chunk($insert, $this->maxModelsPerQuery, 2) as $chunckedArray) {
-                DB::table(with(new $class)->getTable())->insert($chunckedArray);
+                DB::table($table)->insert($chunckedArray);
             }
         }
     }
