@@ -27,6 +27,16 @@ class ModelTransaction
      */
     private $touchTimestamps = true;
 
+    /**
+     * @var array
+     */
+    private $blacklist = [];
+
+    /**
+     * @var array
+     */
+    private $whitelist = [];
+
 
 
     /**
@@ -112,6 +122,32 @@ class ModelTransaction
 
 
     /**
+     * Set model whitelist. Expects array with class names.
+     *
+     * @param  array  $whitelist
+     * @return void
+     * @throws BindingResolutionException
+     */
+    public static function whitelist(array $whitelist) : void
+    {
+        self::getSingleton()->whitelist = $whitelist;
+    }
+
+
+    /**
+     * Set model blacklist. Expects array with class names.
+     *
+     * @param  array  $blacklist
+     * @return void
+     * @throws BindingResolutionException
+     */
+    public static function blacklist(array $blacklist) : void
+    {
+        self::getSingleton()->blacklist = $blacklist;
+    }
+
+
+    /**
      * Register model
      *
      * @param $arguments
@@ -123,6 +159,16 @@ class ModelTransaction
         $self = self::getSingleton();
 
         if($self->collecting) {
+            //Check whitelist
+            if (count($self->whitelist) > 0 && !in_array(get_class($arguments), $self->whitelist)) {
+                return true;
+            }
+
+            //Check blacklist
+            if (in_array(get_class($arguments), $self->blacklist)) {
+                return true;
+            }
+
             $self->models->add($arguments);
 
             return false;
