@@ -18,7 +18,7 @@ class ModelTransaction
     private $collecting = false;
 
     /**
-     * @var bool
+     * @var integer
      */
     private $maxModelsPerQuery = 250;
 
@@ -43,8 +43,9 @@ class ModelTransaction
      *
      * @return mixed
      * @throws BindingResolutionException
+     * @return void
      */
-    private static function getSingleton()
+    private static function getSingleton() : void
     {
         return app()->make(self::class);
     }
@@ -54,6 +55,7 @@ class ModelTransaction
      * Start transaction
      *
      * @throws BindingResolutionException
+     * @return void
      */
     public static function start() : void
     {
@@ -65,6 +67,7 @@ class ModelTransaction
      * Flush transaction to database
      *
      * @throws BindingResolutionException
+     * @return void
      */
     public static function flush() : void
     {
@@ -86,6 +89,7 @@ class ModelTransaction
      *
      * @param  int  $amount
      * @throws BindingResolutionException
+     * @return void
      */
     public static function setMaxModelsPerQuery(int $amount) : void
     {
@@ -99,6 +103,7 @@ class ModelTransaction
      *
      * @param  bool  $value
      * @throws BindingResolutionException
+     * @return void
      */
     public static function setTouchTimestamps(bool $value) : void
     {
@@ -149,6 +154,8 @@ class ModelTransaction
 
     /**
      * Insert models to database
+     *
+     * @return void
      */
     private function insert() : void
     {
@@ -168,6 +175,7 @@ class ModelTransaction
 
                 array_push($insert, $model->getAttributes() + $keys + $touchTimestamps);
             }
+
             $table = with(new $class)->getTable();
             foreach(array_chunk($insert, $this->maxModelsPerQuery, 2) as $chunckedArray) {
                 DB::table($table)->insert($chunckedArray);
@@ -219,9 +227,9 @@ class ModelTransaction
                 $updates[$model->$pk] += $touchTimestamps;
             }
 
-
-            foreach(array_chunk($updates, $this->maxModelsPerQuery, 2) as $chunckedArray) {
-                $statement = $this->createUpdateQuery(with(new $class)->getTable(), $chunckedArray, $pk);
+            $table = with(new $class)->getTable();
+            foreach(array_chunk($updates, $this->maxModelsPerQuery, 2) as $chunkedArray) {
+                $statement = $this->createUpdateQuery($table, $chunkedArray, $pk);
                 DB::update($statement->query, $statement->params);
             }
         }
