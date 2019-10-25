@@ -102,7 +102,7 @@ class ModelTransaction
      */
     public static function flush() : void
     {
-        self::getSingleton()->commit();
+        self::commit();
     }
 
 
