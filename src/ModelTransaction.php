@@ -74,12 +74,12 @@ class ModelTransaction
 
 
     /**
-     * Flush transaction to database
+     * Commit transaction to database
      *
      * @throws BindingResolutionException
      * @return void
      */
-    public static function flush() : void
+    public static function commit() : void
     {
         $self = self::getSingleton();
 
@@ -90,6 +90,19 @@ class ModelTransaction
             $self->collecting = false;
             $self->models = collect();
         }
+    }
+
+
+    /**
+     * Flush transaction to database
+     *
+     * @deprecated
+     * @throws BindingResolutionException
+     * @return void
+     */
+    public static function flush() : void
+    {
+        self::getSingleton()->commit();
     }
 
 

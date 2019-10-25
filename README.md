@@ -28,10 +28,10 @@ You can now use transactions for models. You can start a transaction with
 ModelTransaction::start();
 ```
 
-And finish / flush the transaction with
+And commit the transaction to the databse with
 
 ```php
-ModelTransaction::flush();
+ModelTransaction::commit();
 ```
 
 You can change the default chunk size with: (Default 250)
